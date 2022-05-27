@@ -15,10 +15,12 @@ def get_color():
         "2": "yello"
     }
     if not request.args:
-        return jsonify(code="null", msg="请传入参数key")
-    key = request.args.get("key")
-    if not key:
-        return jsonify(code=key, msg="查询参数必须是key")
+        return jsonify(code="null", msg="请传入参数key [value为1、2、3]")
+    key = request.args.get("key", None)
+    if len(request.args) > 1 or (request.args == 1 and not key):
+        return jsonify(code=key, msg="请不要传递多余的参数")
+    if key is None:
+        return jsonify(code=key, msg="参数必须为key")
     if color.get(key):
         return jsonify(code=key, msg=color.get(key))
     return jsonify(code=key, msg="您查询的key不存在")
